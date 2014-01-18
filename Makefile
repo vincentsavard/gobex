@@ -1,8 +1,11 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror -pedantic -std=c99
 
-all: obj/gobex.o obj/extract.o obj/file.o
+all: directories obj/gobex.o obj/extract.o obj/file.o
 	$(CC) $(CFLAGS) obj/gobex.o obj/extract.o obj/file.o -o bin/gobex
+
+directories:
+	mkdir -p obj/ bin/
 
 obj/gobex.o: src/gobex.c
 	$(CC) $(CFLAGS) -c $< -o $@
