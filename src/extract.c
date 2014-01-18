@@ -47,12 +47,9 @@ int extract_files_from_gob(const char *filename) {
 
     entries = (struct file_entry *)malloc(sizeof(struct file_entry) * num_files);
     check(buffer, "gobex: out of memory");
+    
     find_files(buffer, entries, num_files);
-
-    char *basename = (char *)malloc(sizeof(char) * strlen(filename));
-    get_basename(filename, basename);
-    create_directory(basename);
-    extract_files(handle, entries, num_files, basename);
+    extract_files(handle, entries, num_files);
 
     free(entries);
     free(buffer);
@@ -79,20 +76,17 @@ int find_files(const char *buffer, struct file_entry *entries, int num_files) {
     return 1;
 }
 
-int extract_files(FILE *handle, const struct file_entry *entries, int num_files, const char *directory) {
-    char *buffer = 0, *new_file_name = 0;
+int extract_files(FILE *handle, const struct file_entry *entries, int num_files) {
+    char *buffer = 0;
     FILE *new_file = 0;
 
     for (int i = 0; i < num_files; i++) {
 	buffer = (char *)malloc(sizeof(char) * entries[i].size);
-	new_file_name = (char *)malloc(sizeof(char) * (strlen(directory) + strlen(entries[i].name) + 2));
 	fseek(handle, entries[i].pos, SEEK_SET);
 	fread(buffer, sizeof(char), entries[i].size, handle);
-	sprintf(new_file_name, "%s/%s", directory, entries[i].name);
-	new_file = fopen(new_file_name, "wb");
+	new_file = fopen(entries[i].name, "wb");
 	fwrite(buffer, sizeof(char), entries[i].size, new_file);
 	fclose(new_file);
-	free(new_file_name);
 	free(buffer);
     }
 

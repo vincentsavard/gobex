@@ -14,7 +14,7 @@ struct file_entry {
 
 int extract_files_from_gob(const char *filename);
 int find_files(const char *buffer, struct file_entry *entries, int num_files);
-int extract_files(FILE *handle, const struct file_entry *entries, int num_files, const char *filename);
+int extract_files(FILE *handle, const struct file_entry *entries, int num_files);
 void print_files(const struct file_entry *entries, int num_files);
 int unpack_int(const char *buffer);
 
